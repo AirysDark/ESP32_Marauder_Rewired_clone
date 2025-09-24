@@ -1,4 +1,4 @@
-name: debug custom (JSON strict)
+name: debug custom backup (JSON strict)
 
 on:
   workflow_dispatch:
@@ -29,10 +29,12 @@ on:
           - M5StickC / M5StickC-Plus
           - M5Stamp S3
           - Other (enter FQBN)
+
       fqbn_override:
         description: 'If "Other", paste exact FQBN (e.g., esp32:esp32:nodemcu-32s or esp32:esp32:esp32s3:PSRAM=enabled)'
         required: false
         default: ''
+
       profile_name:
         type: choice
         description: 'Profile from modules_presets.json (Auto picks from manifest.json)'
@@ -48,10 +50,12 @@ on:
           - Displayless
           - Debug
           - Custom
+
       modules_csv:
         description: 'If profile_name=Custom: CSV like WIFI,BLE,WEB,SD,GPS,TOUCH,LVGL,NEOPIXEL,BUZZER,BUTTONS,BATTERY,NRF24,USB_MSC,TFT_ON,DEBUG,DUAL_WIFI,2WIFI'
         required: false
         default: ''
+
       custom_pins:
         description: >
           Free-form pin overrides. Examples:
@@ -62,6 +66,7 @@ on:
           (space-separated key=value list; values can be CSV)
         required: false
         default: ''
+
       tft_model:
         type: choice
         description: 'Select TFT/Display model (from display_presets.json)'
@@ -87,6 +92,7 @@ on:
           - EPD2IN13
           - EPD7IN5
           - RA8875
+
       core_choice:
         description: "ESP32 core version"
         required: true
@@ -96,11 +102,13 @@ on:
           - auto
           - 2.0.10
           - 3.3.0
+
       filesystem:
         type: choice
         description: 'Filesystem override (blank = default/manifest)'
         default: ''
         options: ['', 'spiffs', 'littlefs']
+
       partition_choice:
         description: "Partition table"
         required: true
@@ -175,6 +183,16 @@ jobs:
           echo "CUSTOM_PINS=${{ github.event.inputs.custom_pins }}" >> $GITHUB_ENV
           echo "FILESYSTEM_OVERRIDE=${{ github.event.inputs.filesystem }}" >> $GITHUB_ENV
           echo "TFT_MODEL_INPUT=${{ github.event.inputs.tft_model }}" >> $GITHUB_ENV
+
+      # (Optional) Special mapping for AirysDark build
+      # - name: AirysDark build mapping (optional)
+      #   shell: bash
+      #   run: |
+      #     set -euo pipefail
+      #     if [ "${BOARD_LABEL}" = "AirysDark build" ]; then
+      #       echo "BOARD_LABEL=AirysDark S3" >> $GITHUB_ENV
+      #       echo "PROFILE_NAME=Full" >> $GITHUB_ENV
+      #     fi
 
       # --- Manifest debug and exporter enforcement ---
       - name: Manifest probe (board row preview)
@@ -380,12 +398,13 @@ jobs:
             --pins-override "${CUSTOM_PINS:-}" \
             --out-dir "${{ steps.prep.outputs.sketch_dir }}/.tft_setup"
 
+
       - name: Show generated TFT_eSPI header
-        if: always()
         shell: bash
         run: |
           echo "----- User_Setup_Autogen.h -----"
-          cat "${{ steps.prep.outputs.sketch_dir }}/.tft_setup/User_Setup_Autogen.h" || echo "MISSING!"
+          sed -n '1,200p' "${{ steps.prep.outputs.sketch_dir }}/.tft_setup/User_Setup_Autogen.h" || true
+
 
       # ---------- Partitions ----------
       - name: Resolve partition (auto/manual) and install CSV
@@ -520,10 +539,3 @@ jobs:
         with:
           name: build-debug-log
           path: build_log.txt
-
-      - name: Upload TFT setup header
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: tft-setup-header
-          path: ${{ steps.prep.outputs.sketch_dir }}/.tft_setup/User_Setup_Autogen.h
