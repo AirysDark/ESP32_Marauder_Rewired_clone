@@ -1,0 +1,38 @@
+﻿{
+  "name": "M5Cardputer",
+  "board_fqbn": "esp32:esp32:esp32s3",
+  "filesystem": {
+    "prefer": "auto"
+  },
+  "display": {
+    "present": true,
+    "controller": "ST7789",
+    "width": 240,
+    "height": 135,
+    "rotation": 1,
+    "touch": {
+      "present": false
+    }
+  },
+  "features": {
+    "wifi": true,
+    "bluetooth": true,
+    "gps": false,
+    "neopixel": false,
+    "nrf24": false,
+    "keyboard": true
+  },
+  "pins": {
+    "spi_mosi": null,
+    "spi_miso": null,
+    "spi_sck": null,
+    "tft_cs": null,
+    "tft_dc": null,
+    "tft_rst": null,
+    "kb_sda": null,
+    "kb_scl": null
+  },
+  "build_flags": [],
+  "notes": "Add keyboard I2C pins and TFT pins."
+}
+

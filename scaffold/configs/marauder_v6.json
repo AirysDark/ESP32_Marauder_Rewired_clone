@@ -1,0 +1,35 @@
+﻿{
+  "name": "Marauder v6",
+  "board_fqbn": "esp32:esp32:esp32",
+  "filesystem": {
+    "prefer": "auto"
+  },
+  "display": {
+    "present": true,
+    "controller": "ILI9341/ILI9488",
+    "width": 320,
+    "height": 240,
+    "rotation": 1,
+    "touch": {
+      "present": false
+    }
+  },
+  "features": {
+    "wifi": true,
+    "bluetooth": true,
+    "gps": false,
+    "neopixel": false,
+    "nrf24": false
+  },
+  "pins": {
+    "spi_mosi": null,
+    "spi_miso": null,
+    "spi_sck": null,
+    "tft_cs": null,
+    "tft_dc": null,
+    "tft_rst": null
+  },
+  "build_flags": [],
+  "notes": "Fill per v6 wiring."
+}
+

@@ -1,0 +1,32 @@
+﻿{
+  "name": "Flipper Zero Multi Board S3",
+  "board_fqbn": "esp32:esp32:esp32s3",
+  "filesystem": {
+    "prefer": "auto"
+  },
+  "display": {
+    "present": false
+  },
+  "features": {
+    "wifi": true,
+    "bluetooth": true,
+    "gps": false,
+    "neopixel": false,
+    "nrf24": false
+  },
+  "pins": {
+    "i2c_sda": null,
+    "i2c_scl": null,
+    "spi_mosi": null,
+    "spi_miso": null,
+    "spi_sck": null,
+    "sd_cs": null,
+    "btn_up": null,
+    "btn_down": null,
+    "btn_enter": null,
+    "btn_back": null
+  },
+  "build_flags": [],
+  "notes": "Add peripherals as needed."
+}
+
